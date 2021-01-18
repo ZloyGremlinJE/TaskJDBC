@@ -44,17 +44,7 @@ public class Main {
         System.out.println(user);
         System.out.println(password);
 
-
-//        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/employee?useSSL=false", "hbstudent", "hbstudent");
-//             Statement statement = connection.createStatement()) {
-//            System.out.println("Database connection successful!\n");
-//            statement.executeUpdate(sql);
-//            System.out.println("Table users create successful or already exists!");
-//        } catch (SQLException sqlException) {
-//            sqlException.printStackTrace();
-//        }
-
-
+        System.out.println();
         try (Connection connection = DriverManager.getConnection(url, user, password);
              Statement statement = connection.createStatement()) {
             System.out.println("Database connection successful!\n");
@@ -63,6 +53,9 @@ public class Main {
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
+
+
+
 
 
     }
