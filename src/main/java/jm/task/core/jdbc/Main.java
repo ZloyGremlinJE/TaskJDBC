@@ -1,64 +1,26 @@
 package jm.task.core.jdbc;
 
-import jm.task.core.jdbc.dao.ConnectionBuilderImpl;
-import jm.task.core.jdbc.dao.ConnectionFactory;
+import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.util.Util;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Main {
     public static void main(String[] args) {
 
-        try {
-            Util.initGlobalConfig();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-
-        String sql = "CREATE TABLE if not exists users " +
-                "(id BIGINT not NULL, " +
-                " name VARCHAR(255), " +
-                " lastName VARCHAR(255), " +
-                " age TINYINT, " +
-                " PRIMARY KEY ( id ))";
+        UserDaoJDBCImpl t = new UserDaoJDBCImpl();
+        t.createUsersTable();
+        t.dropUsersTable();
 
 
 
 
 
-//        String url = Util.getProperty("db.url");
-//        String user = Util.getProperty("db.user");
-//        String password = Util.getProperty("db.password");
-//        System.out.println(url);
-//        System.out.println(user);
-//        System.out.println(password);
 
-       // System.out.println();
-//        try (Connection connection = DriverManager.getConnection(url, user, password);
-//             Statement statement = connection.createStatement()) {
-//            System.out.println("Database connection successful!\n");
-//            statement.executeUpdate(sql);
-//            System.out.println("Table users create successful or already exists!");
-//        } catch (SQLException sqlException) {
-//            sqlException.printStackTrace();
-//        }
-
-        try (Connection connection = ConnectionFactory.getConnectionBuilder().getConnection()) {
-
-                Statement statement = connection.createStatement() ;
-                System.out.println("Database connection successful!\n");
-                statement.executeUpdate(sql);
-                System.out.println("Table users create successful or already exists!");
-
-
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
 
 
 
