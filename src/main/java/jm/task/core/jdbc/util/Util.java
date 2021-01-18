@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class Util {
-    private static final String CONFIG_NAME = "employee.properties";
+    private static final String CONFIG_NAME = "db.properties";
     private static final Properties GLOBAL_CONFIG = new Properties();
 
     public static void initGlobalConfig() throws IOException {
