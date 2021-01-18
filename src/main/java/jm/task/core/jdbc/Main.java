@@ -1,5 +1,7 @@
 package jm.task.core.jdbc;
 
+import jm.task.core.jdbc.dao.ConnectionBuilderImpl;
+import jm.task.core.jdbc.dao.ConnectionFactory;
 import jm.task.core.jdbc.util.Util;
 
 import java.io.IOException;
@@ -10,14 +12,6 @@ import java.sql.Statement;
 
 public class Main {
     public static void main(String[] args) {
-
-
-
-
-
-
-
-
 
         try {
             Util.initGlobalConfig();
@@ -37,24 +31,34 @@ public class Main {
 
 
 
-        String url = Util.getProperty("db.url");
-        String user = Util.getProperty("db.user");
-        String password = Util.getProperty("db.password");
-        System.out.println(url);
-        System.out.println(user);
-        System.out.println(password);
+//        String url = Util.getProperty("db.url");
+//        String user = Util.getProperty("db.user");
+//        String password = Util.getProperty("db.password");
+//        System.out.println(url);
+//        System.out.println(user);
+//        System.out.println(password);
 
-        System.out.println();
-        try (Connection connection = DriverManager.getConnection(url, user, password);
-             Statement statement = connection.createStatement()) {
-            System.out.println("Database connection successful!\n");
-            statement.executeUpdate(sql);
-            System.out.println("Table users create successful or already exists!");
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+       // System.out.println();
+//        try (Connection connection = DriverManager.getConnection(url, user, password);
+//             Statement statement = connection.createStatement()) {
+//            System.out.println("Database connection successful!\n");
+//            statement.executeUpdate(sql);
+//            System.out.println("Table users create successful or already exists!");
+//        } catch (SQLException sqlException) {
+//            sqlException.printStackTrace();
+//        }
+
+        try (Connection connection = ConnectionFactory.getConnectionBuilder().getConnection()) {
+
+                Statement statement = connection.createStatement() ;
+                System.out.println("Database connection successful!\n");
+                statement.executeUpdate(sql);
+                System.out.println("Table users create successful or already exists!");
+
+
+        }catch (SQLException e){
+            e.printStackTrace();
         }
-
-
 
 
 
