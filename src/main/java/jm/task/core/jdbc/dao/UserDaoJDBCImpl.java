@@ -3,10 +3,8 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
@@ -53,12 +51,7 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setString(2, lastName);
             preparedStatement.setInt(3, age);
             preparedStatement.executeUpdate();
-            System.out.println("User: " +
-                    name + "/" +
-                    lastName +
-                    "/" +
-                    age +
-                    " added to db!");
+            System.out.println("User: " + name + "/" + lastName + "/" + age + " added to db!");
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -68,15 +61,52 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    public void removeUserById(long id) {
-
+    public void removeUserById(long id) throws SQLException {
+        String DELETE_BY_ID = "DELETE FROM users WHERE id= ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID)) {
+            connection.setAutoCommit(false);
+            preparedStatement.setString(1, String.valueOf(id));
+            preparedStatement.executeUpdate();
+            System.out.println("User with id : " + id + " deleted from db!");
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            connection.rollback();
+        } finally {
+            connection.setAutoCommit(true);
+        }
     }
 
     public List<User> getAllUsers() {
-        return null;
+        List<User> userList = new ArrayList<>();
+        try (Statement statement = connection.createStatement()) {
+            ResultSet rs = statement.executeQuery("SELECT * FROM users");
+            while (rs.next()) {
+                User user = new User(rs.getString("name"),
+                        rs.getString("lastName"),
+                        rs.getByte("age"));
+
+                user.setId(rs.getLong("id"));
+                userList.add(user);
+                System.out.println(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userList;
     }
 
-    public void cleanUsersTable() {
-
+    public void cleanUsersTable() throws SQLException {
+        try (Statement statement = connection.createStatement()){
+            connection.setAutoCommit(false);
+            statement.executeUpdate("DELETE from users");
+            System.out.println("Table users cleared!");
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            connection.rollback();
+        }finally {
+            connection.setAutoCommit(true);
+        }
     }
 }
