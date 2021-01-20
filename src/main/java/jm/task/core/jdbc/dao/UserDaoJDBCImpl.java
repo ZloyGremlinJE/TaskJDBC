@@ -9,12 +9,9 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
-
-    Connection connection;
+   private final Connection connection = Util.getConnection();
 
     public UserDaoJDBCImpl() {
-        connection = Util.getConnection();
-        System.out.println("Database connection successful!");
     }
 
     public void createUsersTable() {
@@ -28,7 +25,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(CREATE_TABLE);
             System.out.println("Table users create successful or already exists!");
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             e.printStackTrace();
         }
     }
@@ -37,7 +34,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate("DROP TABLE IF EXISTS users");
             System.out.println("Table users is delete!");
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             e.printStackTrace();
         }
     }
@@ -53,7 +50,7 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.executeUpdate();
             System.out.println("User: " + name + "/" + lastName + "/" + age + " added to db!");
             connection.commit();
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             e.printStackTrace();
             connection.rollback();
         } finally {
@@ -69,7 +66,7 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.executeUpdate();
             System.out.println("User with id : " + id + " deleted from db!");
             connection.commit();
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             e.printStackTrace();
             connection.rollback();
         } finally {
@@ -90,7 +87,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 userList.add(user);
                 System.out.println(user);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             e.printStackTrace();
         }
         return userList;
@@ -102,7 +99,7 @@ public class UserDaoJDBCImpl implements UserDao {
             statement.executeUpdate("DELETE from users");
             System.out.println("Table users cleared!");
             connection.commit();
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             e.printStackTrace();
             connection.rollback();
         }finally {
